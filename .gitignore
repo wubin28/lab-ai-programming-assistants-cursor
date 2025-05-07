@@ -22,8 +22,9 @@ frontend/.vite/
 !**/.env.example
 
 # Cursor
-.cursor/
+.cursor/*
 !.cursor/rules/
+!.cursor/rules/*
 
 # VSCode
 .vscode/*
