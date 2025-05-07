@@ -16,7 +16,7 @@ backend/.env
 .env
 
 # Cursor
-.cursor/
+# .cursor/ # do not ignore rules in .cursor/rules folder
 
 # VSCode
 .vscode/
