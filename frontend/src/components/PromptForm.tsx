@@ -14,8 +14,12 @@ const PromptForm: React.FC<PromptFormProps> = ({
   onOptimize,
   isOptimizing,
 }) => {
-  const [purpose, setPurpose] = useState("");
-  const [prompt, setPrompt] = useState("");
+  const [purpose, setPurpose] = useState(
+    "Find popular prompt optimization tools",
+  );
+  const [prompt, setPrompt] = useState(
+    "Recommend some prompt optimization tools",
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +63,7 @@ const PromptForm: React.FC<PromptFormProps> = ({
 
           <Button
             type="submit"
+            variant="default"
             className="w-full"
             disabled={isOptimizing || !purpose.trim() || !prompt.trim()}
           >

@@ -11,9 +11,25 @@ const simulateOptimization = (
 ): Promise<string> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      // This is a placeholder. In a real application, this would call your API
-      const optimized = `I am looking for the most effective and user-friendly tools for prompt optimization. Please provide a comprehensive list of popular prompt optimization tools available in 2025, including their key features, strengths, and potential use cases. For each tool, explain how it helps improve prompt clarity and effectiveness. Additionally, highlight which tools might be best suited for beginners versus advanced users.`;
-      resolve(optimized);
+      // The exact content as specified in the requirements
+      const promptForDeepSeekAPI = `As a prompt engineering expert, please generate an English prompt based on the answers to the 1 question and 1 original prompt below, targeting AI beginners. The prompt must incorporate the content from all the answer and the original prompt to help formulate high-quality questions for AI. Please provide only the prompt itself, without any additional content.
+
+What Purpose you want AI to help you achieve? Find popular prompt optimization tools.
+
+Provide us the prompt you are using currently for the purpose above (original prompt): Recommend some prompt optimization tools.
+
+请按以下步骤优化原始提示词：
+
+1. 若原始提示词未指定AI角色，添加"你是该内容（original prompt）领域的专家"
+
+2. 若原始提示词未说明输出格式，添加要求提供主要观点的网页链接
+
+3. 若原始提示词未提及交互顾虑，添加"如遇不确定信息，会如实告知，不会编造"
+
+4. 确保优化后的提示词清晰流畅
+
+5. 仅提供优化后的提示词，不附带其他说明`;
+      resolve(promptForDeepSeekAPI);
     }, 3000); // Simulate 3 seconds of processing
   });
 };
@@ -23,9 +39,11 @@ const Index = () => {
   const [optimizedPrompt, setOptimizedPrompt] = useState<string | null>(null);
 
   const handleOptimize = async (purpose: string, prompt: string) => {
+    console.log("Optimize button clicked", { purpose, prompt });
     setIsOptimizing(true);
     try {
       const result = await simulateOptimization(purpose, prompt);
+      console.log("Optimization completed", result);
       setOptimizedPrompt(result);
     } catch (error) {
       console.error("Optimization failed:", error);
