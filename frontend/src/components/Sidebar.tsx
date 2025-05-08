@@ -16,23 +16,23 @@ const Sidebar = () => {
       <div className="mt-4">
         <Button className="w-full flex items-center justify-start gap-2" variant="default">
           <FileText size={16} />
-          <span>新会话</span>
+          <span>New Session</span>
         </Button>
       </div>
       
       <div className="mt-6">
         <div className="flex items-center gap-2 text-gray-500 mb-2">
           <Clock size={16} />
-          <span className="text-sm font-medium">历史记录</span>
+          <span className="text-sm font-medium">History</span>
         </div>
         
         <div className="space-y-1 mt-2">
-          <a href="#" className="sidebar-link">
+          {/* <a href="#" className="sidebar-link">
             提示词优化要素
           </a>
           <a href="#" className="sidebar-link">
             免费AI工具推荐
-          </a>
+          </a> */}
         </div>
       </div>
       
