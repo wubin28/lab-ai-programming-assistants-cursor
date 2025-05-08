@@ -1,3 +1,4 @@
+import 'reflect-metadata'; // Required for tsyringe
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -5,6 +6,7 @@ import dotenv from 'dotenv';
 import pino from 'pino-http';
 import promptRoutes from './routes/prompt.routes';
 import errorHandler from './middleware/error.middleware';
+import './container'; // Initialize the dependency injection container
 
 // Load environment variables
 dotenv.config();
