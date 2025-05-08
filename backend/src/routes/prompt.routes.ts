@@ -10,4 +10,11 @@ const router = Router();
  */
 router.post('/optimize', promptController.optimizePrompt);
 
+/**
+ * @route POST /api/prompt/optimize/stream
+ * @desc Optimize a prompt using DeepSeek API with streaming response
+ * @access Public
+ */
+router.post('/optimize/stream', promptController.streamOptimizePrompt);
+
 export default router; 

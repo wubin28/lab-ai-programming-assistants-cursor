@@ -1,30 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import PromptForm from "../components/PromptForm";
 import OptimizedResult from "../components/OptimizedResult";
 import { Toaster } from "@/components/ui/toaster";
-import { optimizePrompt } from "../services/api";
+import { optimizePromptStream, StreamChunk } from "../services/api";
 import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [optimizedPrompt, setOptimizedPrompt] = useState<string | null>(null);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const streamControllerRef = useRef<{ abort: () => void } | null>(null);
   const { toast } = useToast();
 
   const handleOptimize = async (purpose: string, prompt: string) => {
     console.log("Optimize button clicked", { purpose, prompt });
     setIsOptimizing(true);
-    setOptimizedPrompt(null);
+    setIsStreaming(true);
+    setOptimizedPrompt("");
     setErrorMessage(null);
 
     try {
       // The exact content as specified in the requirements
       const promptForDeepSeekAPI = `As a prompt engineering expert, please generate an English prompt based on the answers to the 1 question and 1 original prompt below, targeting AI beginners. The prompt must incorporate the content from all the answer and the original prompt to help formulate high-quality questions for AI. Please provide only the prompt itself, without any additional content.
 
-What Purpose you want AI to help you achieve? Find popular prompt optimization tools.
+What Purpose you want AI to help you achieve? ${purpose}
 
-Provide us the prompt you are using currently for the purpose above (original prompt): Recommend some prompt optimization tools.
+Provide us the prompt you are using currently for the purpose above (original prompt): ${prompt}
 
 请按以下步骤优化原始提示词：
 
@@ -38,24 +41,44 @@ Provide us the prompt you are using currently for the purpose above (original pr
 
 5. 仅提供优化后的提示词，不附带其他说明`;
 
-      const result = await optimizePrompt({
-        prompt: promptForDeepSeekAPI,
-        purpose: purpose
-      });
-
-      if (result.error) {
-        setErrorMessage(result.error);
-        toast({
-          title: "Optimization Error",
-          description: result.error,
-          variant: "destructive"
-        });
-      } else {
-        setOptimizedPrompt(result.optimizedPrompt);
+      // Cancel any previous streaming request
+      if (streamControllerRef.current) {
+        streamControllerRef.current.abort();
       }
+
+      // Start streaming request
+      streamControllerRef.current = optimizePromptStream(
+        {
+          prompt: promptForDeepSeekAPI,
+          purpose: purpose
+        }, 
+        (data: StreamChunk) => {
+          if (data.error) {
+            setErrorMessage(data.error);
+            setIsStreaming(false);
+            toast({
+              title: "Optimization Error",
+              description: data.error,
+              variant: "destructive"
+            });
+          } else {
+            // Update the optimized prompt with the new chunk
+            setOptimizedPrompt((prev) => (prev || "") + data.chunk);
+            
+            // If complete, use the full response and end streaming
+            if (data.complete) {
+              if (data.fullResponse) {
+                setOptimizedPrompt(data.fullResponse);
+              }
+              setIsStreaming(false);
+            }
+          }
+        }
+      );
     } catch (error: any) {
       console.error("Optimization failed:", error);
       setErrorMessage("Failed to optimize prompt: " + error.message);
+      setIsStreaming(false);
       toast({
         title: "Optimization Failed",
         description: error.message || "DeepSeek didn't respond",
@@ -87,7 +110,11 @@ Provide us the prompt you are using currently for the purpose above (original pr
 
           <PromptForm onOptimize={handleOptimize} isOptimizing={isOptimizing} />
 
-          <OptimizedResult optimizedPrompt={optimizedPrompt} error={errorMessage} />
+          <OptimizedResult 
+            optimizedPrompt={optimizedPrompt} 
+            error={errorMessage} 
+            isStreaming={isStreaming}
+          />
         </div>
       </main>
 
