@@ -3,13 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Copy } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { AlertCircle } from "lucide-react";
 
 interface OptimizedResultProps {
   optimizedPrompt: string | null;
+  error?: string | null;
 }
 
 const OptimizedResult: React.FC<OptimizedResultProps> = ({
   optimizedPrompt,
+  error,
 }) => {
   const { toast } = useToast();
 
@@ -41,7 +44,12 @@ const OptimizedResult: React.FC<OptimizedResultProps> = ({
         )}
       </div>
       <div className="prompt-form-card">
-        {optimizedPrompt ? (
+        {error ? (
+          <div className="text-red-500 p-4 text-center flex items-center justify-center gap-2">
+            <AlertCircle size={18} />
+            <span>{error}</span>
+          </div>
+        ) : optimizedPrompt ? (
           <Textarea
             value={optimizedPrompt}
             readOnly
