@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: false
 ---
-# Promptyoo-1 C4 模型架构描述
+# Promptyoo-1 C4 模型架构描述（编写代码前）
 
 ## Context 层
 
