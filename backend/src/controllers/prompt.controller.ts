@@ -88,6 +88,7 @@ export class PromptControllerSingleton extends PromptController {
 // Export a default instance for backward compatibility
 class DefaultPromptController extends PromptController {
   constructor() {
+    // Use the imported default service instance
     super(deepseekServiceDefault);
   }
 }
