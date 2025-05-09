@@ -1,6 +1,6 @@
 ```mermaid
 C4Component
-title Response Flow - From DeepSeek API to End User
+title Response Flow - From DeepSeek API to End User (before coding)
 
 Person(user, "End User", "Receives optimized AI prompts")
 System_Ext(deepseekApi, "DeepSeek AI API", "Provides prompt optimization service")

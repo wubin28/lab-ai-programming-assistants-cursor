@@ -1,6 +1,6 @@
 ```mermaid
 C4Component
-title Request Flow - From End User to DeepSeek API
+title Request Flow - From End User to DeepSeek API (before coding)
 
 Person(user, "End User", "Needs to optimize AI prompts")
 System_Boundary(frontend, "Frontend Application") {
